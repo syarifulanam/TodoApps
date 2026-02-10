@@ -12,4 +12,9 @@ public class TodoController {
     public String index() {
         return "todos/index";
     }
+
+    @GetMapping("/create")
+    public String create() {
+        return "todos/create";
+    }
 }
