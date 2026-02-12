@@ -5,13 +5,14 @@ import com.syariful.todoapps.model.TodoStatus;
 import com.syariful.todoapps.service.TodoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RequiredArgsConstructor
@@ -22,7 +23,11 @@ public class TodoController {
     private final TodoService todoService;
 
     @GetMapping
-    public String index() {
+    public String index(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, Model model) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<TodoDto> todoPage = todoService.findAll(pageable);
+        model.addAttribute("todos", todoPage);
         return "todos/index";
     }
 
@@ -34,11 +39,7 @@ public class TodoController {
     }
 
     @PostMapping("/create")
-    public String saveTodo(
-            @Valid @ModelAttribute("todo") TodoDto todoDto,
-            BindingResult result,
-            RedirectAttributes redirecAttributes,
-            Model model) {
+    public String saveTodo(@Valid @ModelAttribute("todo") TodoDto todoDto, BindingResult result, RedirectAttributes redirecAttributes, Model model) {
 
         // NOTE : jika ada error. maka balik ke halaman create tapi pakai todo yg saat ini
         if ((result.hasErrors())) {

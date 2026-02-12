@@ -24,36 +24,57 @@
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>1</td>
-                <td>Spring Boot</td>
-                <td>Learning & Coding Spring Boot Apps</td>
+            <tr th:each="todo : ${todos.content}">
+                <td th:text="${todo.id}"></td>
+                <td th:text="${todo.title}"></td>
+                <td th:text="${todo.description}"></td>
                 <td>
-                    <span class="badge bg-success">DONE</span>
+                    <span th:class="${'badge ' +
+                            (todo.status.name() == 'DONE' ? 'bg-success' :
+                            (todo.status.name() == 'IN_PROGRESS' ? 'bg-warning' : 'bg-secondary'))}"
+                          th:text="${todo.status}">
+                    </span>
                 </td>
-                <td>08-02-2026 06:37</td>
+                <td th:text="${#temporals.format(todo.createdAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td>
                     <a class="btn btn-sm btn-warning">Edit</a>
                     <a class="btn btn-sm btn-danger"
                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
                 </td>
             </tr>
+            <tr th:if="${todos.empty}">
+                <td colspan="6" class="text-center">No todos found.</td>
+            </tr>
             </tbody>
         </table>
 
-        <nav>
+        <nav th:if="${todos.totalPages > 1}">
             <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link">Previous</a>
+                <li class="page-item" th:classappend="${todos.first} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/todos(page=${todos.number - 1})}">
+                        Previous
+                    </a>
                 </li>
-                <li class="page-item active">
-                    <a class="page-link">1</a>
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0, todos.totalPages - 1)}"
+                    th:classappend="${todos.number == i} ? 'active'">
+                    <a class="page-link"
+                       th:href="@{/todos(page=${i})}"
+                       th:text="${i + 1}">
+                        1
+                    </a>
                 </li>
-                <li class="page-item">
-                    <a class="page-link">Next</a>
+                <li class="page-item" th:classappend="${todos.last} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/todos(page=${todos.number + 1})}">
+                        Next
+                    </a>
                 </li>
+
             </ul>
         </nav>
+
     </div>
 </section>
 
