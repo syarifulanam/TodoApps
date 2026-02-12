@@ -4,7 +4,7 @@ import com.syariful.todoapps.dto.TodoDto;
 import com.syariful.todoapps.model.TodoStatus;
 import com.syariful.todoapps.service.TodoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/todos")
 public class TodoController {
 
-    @Autowired
-    private TodoService todoService;
+    private final TodoService todoService;
 
     @GetMapping
     public String index() {
