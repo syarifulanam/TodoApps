@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -42,5 +43,14 @@ public class TodoService {
                 pageable,
                 todoPage.getTotalElements()
         );
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        if (!todoRepository.existsById(id)) {
+            throw new NoSuchElementException("Todo not found with id " + id);
+        }
+
+        todoRepository.deleteById(id);
     }
 }

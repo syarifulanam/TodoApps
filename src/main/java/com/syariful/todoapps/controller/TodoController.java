@@ -53,4 +53,12 @@ public class TodoController {
         redirecAttributes.addFlashAttribute("alertClass", "alert-success");
         return "redirect:/todos";
     }
+
+    @GetMapping("/delete/{id}")
+    public String deleteTodo(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        todoService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "Todo deleted successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+        return "redirect:/todos";
+    }
 }
