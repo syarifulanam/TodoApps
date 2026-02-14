@@ -61,4 +61,32 @@ public class TodoController {
         redirectAttributes.addFlashAttribute("alertClass", "alert-success");
         return "redirect:/todos";
     }
+
+    //buka form edit aja
+    @GetMapping("/edit/{id}")
+    public String editTodoForm(@PathVariable Long id, Model model) {
+        TodoDto todoDto = todoService.findById(id);
+        model.addAttribute("todo", todoDto);
+        model.addAttribute("statuses", TodoStatus.values());
+        return "todos/edit";
+    }
+
+    //untuk simpan data/update data
+    @PostMapping("/edit/{id}")
+    public String updateTodo(@PathVariable Long id, @Valid @ModelAttribute("todo") TodoDto todoDto, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("statuses", TodoStatus.values());
+            return "todos/edit";
+        }
+        // simpan data yg sudah kita ubah
+        todoService.updateTodo(id,todoDto);
+
+        //beri pesan sukses di halaman todos
+        redirectAttributes.addFlashAttribute("message", "Todo updated successfully");
+        redirectAttributes.addFlashAttribute("alertClass", "alert-success");
+
+        return "redirect:/todos";
+    }
+
 }

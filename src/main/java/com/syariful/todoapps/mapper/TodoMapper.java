@@ -37,4 +37,14 @@ public class TodoMapper {
 
         return todo;
     }
+
+    public void updatedEntityFromDto(TodoDto dto, Todo todo) {
+        if (dto == null || todo == null) {
+            return;
+        }
+
+        todo.setTitle(dto.getTitle());
+        todo.setDescription(dto.getDescription());
+        todo.setStatus(dto.getStatus());
+    }
 }

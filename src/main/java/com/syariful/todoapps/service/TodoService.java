@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +51,33 @@ public class TodoService {
         if (!todoRepository.existsById(id)) {
             throw new NoSuchElementException("Todo not found with id " + id);
         }
-
         todoRepository.deleteById(id);
+    }
+
+    public TodoDto findById(Long id) {
+        Optional<Todo> todo = todoRepository.findById(id);
+        if (todo.isPresent()) {
+            return todoMapper.todoDto(todo.get());
+        }
+        throw new NoSuchElementException("Todo not found with id: "  + id);
+    }
+
+    @Transactional
+    public void updateTodo(Long id, TodoDto todoDto) {
+//        Optional<Todo> todo = todoRepository.findById(id);
+//        if (todo.isPresent()) {
+//            todoMapper.updatedEntityFromDto(todoDto, todo.get());
+//            todoRepository.save(todo.get());
+//            return;
+//        }
+//        throw new NoSuchElementException("Todo not found with id: " + id);
+
+        Optional<Todo> todo = todoRepository.findById(id);
+        if (todo.isEmpty()) {
+            throw new NoSuchElementException("Todo not found with id: " + id);
+        }
+
+        todoMapper.updatedEntityFromDto(todoDto,todo.get());
+        todoRepository.save(todo.get());
     }
 }
