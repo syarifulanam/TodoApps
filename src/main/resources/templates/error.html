@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Error</title>
+</head>
+<body>
+<section>
+    <div class="d-flex align-items-center justify-content-center vh-50">
+        <div class="text-center">
+            <h1 class="display-1 fw-bold text-danger">Oops!</h1>
+            <p class="fs-3"><span class="text-danger">Error:</span> <span th:text="${errorMessage}">Something went wrong.</span>
+            </p>
+            <p class="load">
+                The page you're looking for doesn't exist or an error occurred.
+            </p>
+            <div class="mt-4">
+                <a href="/" class="btn btn-promary">Go Home</a>
+                <a href="javascript:history.back()" class="btn btn-outline-secondary">Go Back</a>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
