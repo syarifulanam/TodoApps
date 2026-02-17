@@ -6,6 +6,7 @@ import com.syariful.todoapps.model.Todo;
 import com.syariful.todoapps.repository.TodoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TodoService {
@@ -31,6 +33,10 @@ public class TodoService {
     }
 
     public Page<TodoDto> findAll(Pageable pageable) {
+        //log.info("Query Tanpa Pagination:");
+        //List<Todo> todoList = todoRepository.findAll();
+
+        //log.info("Query Dengan Pagination:");
         Page<Todo> todoPage = todoRepository.findAll(pageable);
 
         List<TodoDto> dtoList = new ArrayList<>();
